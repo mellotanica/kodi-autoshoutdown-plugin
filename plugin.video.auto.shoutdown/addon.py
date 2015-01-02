@@ -34,8 +34,9 @@ class MyPlayer(xbmc.Player):
             self.terminatedExecution = True
             infoNot("All desired items played, will shout down in 3 seconds..")
             xbmc.sleep(3000)
-            debNot("SHOUTDOWN")
-            #xbmc.executebuiltin('ShutDown()')
+            if xbmc.abortRequested:
+                    return
+            xbmc.executebuiltin('ShutDown()')
         else:
             if self.old_item < len(self.myplaylist):
                 self.play(self.myplaylist, startpos=self.old_item)
@@ -66,8 +67,7 @@ class MyPlayer(xbmc.Player):
                 if xbmc.abortRequested:
                     return
                 infoNot("Bye",1000)
-                debNot("SHOUTDOWN")
-                #xbmc.executebuiltin('ShutDown()')
+                xbmc.executebuiltin('ShutDown()')
     
     def getClearToGo(self):
         return self.terminatedExecution
