@@ -43,16 +43,28 @@ class MyPlayer(xbmc.Player):
                 self.terminatedExecution = True
                 infoNot("Playlist is empty, will shout down in 10 seconds...", 5000, playsound=True)
                 xbmc.sleep(5000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("5..",1000)
                 xbmc.sleep(1000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("4..",1000)
                 xbmc.sleep(1000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("3..",1000)
                 xbmc.sleep(1000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("2..",1000)
                 xbmc.sleep(1000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("1..",1000)
                 xbmc.sleep(1000)
+                if xbmc.abortRequested:
+                    return
                 infoNot("Bye",1000)
                 debNot("SHOUTDOWN")
                 #xbmc.executebuiltin('ShutDown()')
