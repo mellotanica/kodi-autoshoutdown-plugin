@@ -2,7 +2,19 @@ import xbmcgui
 import xbmc
 import sys
 
-debugActive = True
+debugActive = False
+
+noMoreFilesTimeout = 10
+
+def countToZero(start):
+    s = start
+    while s > 0:
+        infoNot(str(s)+"..",1000)
+        xbmc.sleep(1000)
+        if xbmc.abortRequested:
+            return True
+        s = s - 1
+    return False
 
 def infoNot(text, showtime=2000, header="Info", playsound=False):
     xbmcgui.Dialog().notification(heading=header, message=text, time=showtime, sound=playsound)
@@ -16,7 +28,8 @@ class MyPlayer(xbmc.Player):
         xbmc.Player.__init__(self)
         self.old_player = kwargs['player']
         self.myplaycount = 0
-        self.mylastplay = kwargs['items']
+        self.mylastplay = int(kwargs['items'])
+        self.mytimeout = int(kwargs['timeout'])
         self.myshutdownenabled = False
         self.terminatedExecution = False
         if not self.old_player.isPlaying():
@@ -30,6 +43,7 @@ class MyPlayer(xbmc.Player):
     def onPlayBackEnded(self):
         self.myplaycount = self.myplaycount+1
         self.old_item = self.old_item + 1
+        debNot("file ended, count: "+str(self.myplaycount)+" total: "+str(self.mylastplay))
         if self.myplaycount >= self.mylastplay:
             self.terminatedExecution = True
             infoNot("All desired items played, will shout down in 3 seconds..")
@@ -39,40 +53,29 @@ class MyPlayer(xbmc.Player):
             xbmc.executebuiltin('ShutDown()')
         else:
             if self.old_item < len(self.myplaylist):
+                debNot("will now play "+str(self.myplaylist[self.old_item].getfilename()))
                 self.play(self.myplaylist, startpos=self.old_item)
             else:
                 self.terminatedExecution = True
-                infoNot("Playlist is empty, will shout down in 10 seconds...", 5000, playsound=True)
-                xbmc.sleep(5000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("5..",1000)
-                xbmc.sleep(1000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("4..",1000)
-                xbmc.sleep(1000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("3..",1000)
-                xbmc.sleep(1000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("2..",1000)
-                xbmc.sleep(1000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("1..",1000)
-                xbmc.sleep(1000)
-                if xbmc.abortRequested:
-                    return
-                infoNot("Bye",1000)
-                xbmc.executebuiltin('ShutDown()')
+                infoNot("Playlist is empty, will shout down in "+str(self.mytimeout)+" seconds...", 5000, playsound=True)
+                if self.mytimeout >= 5:
+                    xbmc.sleep(5000)
+                    if xbmc.abortRequested:
+                        return
+                    self.mytimeout = self.mytimeout - 5
+                    if countToZero(self.mytimeout):
+                        return
+                    xbmc.executebuiltin('ShutDown()')
+                else:
+                    xbmc.sleep(self.mytimeout*1000)
+                    if xbmc.abortRequested:
+                        return
+                    xbmc.executebuiltin('ShutDown()')
     
     def getClearToGo(self):
         return self.terminatedExecution
 
-Player = MyPlayer(player=xbmc.Player(), items=int(sys.argv[1]))
+Player = MyPlayer(player=xbmc.Player(), items=int(sys.argv[1]), timeout=noMoreFilesTimeout)
 
 test = not Player.getClearToGo()
 if test:
