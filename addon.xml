@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.auto.shutdown" name="Auto Shoutdown" version="0.0.1" provider-name="mellotainca">
     <requires>
-        <import addon="xbmc.python" version="2.14.0" />
+        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="xbmc.gui" version="5.0.1"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>executables</provides>
+    <extension point="xbmc.python.script" library="addon.py">
+        <provides>video executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary lang="en"></summary>
-        <description lang="en"></description>
-        <license>GNU General Public License, v3</license>
+        <summary lang="en">Shouts down automatically after desired number of items.</summary>
+        <description lang="en">Perform a programmed shout down after the desired number of queued elements have been reproduced.</description>
+        <disclaimer lang="en"></disclaimer>
         <language></language>
-        <source>https://github.com/mellotanica/plugin.program.auto.shoutdown</source>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3</license>
+        <forum></forum>
+        <website></website>
         <email>mellotanica@hotmail.it</email>
-    </extension>
+        <source>https://github.com/mellotanica/plugin.video.auto.shoutdown</source>
+  </extension>
 </addon>

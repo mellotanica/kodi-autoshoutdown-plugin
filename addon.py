@@ -1,9 +1,21 @@
-import xbmcaddon
 import xbmcgui
+import xbmc
 
-addon = xbmcaddon.Addon()
-addonname = addon.getAddonInfo('name')
+#xbmc.executebuiltin("ShutDown")
 
-line1 = "first try"
+class MyPlayer(xbmc.Player):
+    def onPlayBackEnded(self):
+        xbmcgui.Dialog().ok("play ended")
+    
 
-xbmcgui.Dialog().ok(addonname, line1)
+count = 0
+
+heading = "How many items will you watch?"
+
+number = xbmcgui.Dialog().numeric(0,heading)
+
+debug1 = "inserted number: "+number+", count: "+str(count)+", is playing: "+str(xbmc.Player().isPlaying())
+
+xbmcgui.Dialog().ok("DEBUG", debug1)
+
+xbmc.Player = MyPlayer()
