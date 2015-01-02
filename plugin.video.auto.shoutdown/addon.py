@@ -66,8 +66,17 @@ test = not Player.getClearToGo()
 if test:
     infoNot("will reproduce "+sys.argv[1]+" elements from playlist and shout down", 3000)
 
+cycle = 0
+
 while test:
-    xbmc.sleep(3000)
+    if xbmc.abortRequested:
+        break
+    xbmc.sleep(500)
+    if cycle < 8:
+        cycle = cycle+1
+        continue
+    else:
+        cycle = 0
     try:
         test = not Player.getClearToGo()
     except:
