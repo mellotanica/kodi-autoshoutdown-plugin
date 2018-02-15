@@ -4,6 +4,10 @@ kodi-autoshoutdown-plugin
 Kodi plugin to automatically shout down application after a specified number of items in playback queue
 
 
+*DEPRECATED*
+Works with kodi versions up to major 15 (Isengard)
+
+
 Install
 -------
 
